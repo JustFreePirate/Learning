@@ -1,24 +1,40 @@
 package ru.spbu.math.pk.java;
 
+import java.io.*;
 import java.util.*;
 
 /**
  * Created by cat on 08.09.15.
  */
 public class CashMachine {
-    public static void main(String[] args) {
-        int sum = 10;
-        Integer coins[] = {5, 2, 1};
-        /* Input */
-        /* ParseInt */
-        /* Try catch */
+    public static void main(String[] args) throws NoSuchElementException{
+        int sum;
+        int countOfCoins;
+        Integer coins[];
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(new BufferedReader(new InputStreamReader(System.in)));
+            System.out.println("Input format: [Sum number_of_coins coin1 coin2 ... coinN]");
+            sum = scanner.nextInt();
+            countOfCoins = scanner.nextInt();
+            coins = new Integer[countOfCoins];
+            for (int i = 0; i < countOfCoins; i++) {
+                coins[i] = scanner.nextInt();
+            }
+        } catch (InputMismatchException e ) {
+            System.out.println("wrong input format");
+            return;
+        } finally {
+            if (scanner != null) {
+                scanner.close();
+            }
+        }
         Arrays.sort(coins, Collections.reverseOrder());  /* sort */
-        List<int[]> options = new LinkedList<int[]>();
-        int[] countOfEach = new int[coins.length];
-        getOptionsToChange(sum, options, countOfEach, coins, 1);
+        List<int[]> options = new LinkedList<int[]>(); //answers
+        int[] countOfEach = new int[coins.length]; //is needed for answer
+        getOptionsToChange(sum, options, countOfEach, coins, 1); //get answers
 
-        for (ListIterator<int[]> it = options.listIterator(); it.hasNext();) {
-            //System.out.println(Arrays.toString(it.next()));
+        for (ListIterator<int[]> it = options.listIterator(); it.hasNext();) { //go to list of answers
             int[] change = it.next();
             for (int i = 0; i < change.length; i++) {
                 System.out.print(coins[i] + "x" + change[i] + "  ");
