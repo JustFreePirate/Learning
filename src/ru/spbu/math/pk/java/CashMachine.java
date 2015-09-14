@@ -7,7 +7,7 @@ import java.util.*;
  */
 public class CashMachine {
     public static void main(String[] args) {
-        int sum = 10;
+        int sum = 10000;
         Integer coins[] = {5, 2, 1};
         /* Input */
         /* ParseInt */
@@ -16,7 +16,7 @@ public class CashMachine {
         List<int[]> options = new LinkedList<int[]>();
         int[] countOfEach = new int[coins.length];
         getOptionsToChange(sum, options, countOfEach, coins, 1);
-
+/*
         for (ListIterator<int[]> it = options.listIterator(); it.hasNext();) {
             //System.out.println(Arrays.toString(it.next()));
             int[] change = it.next();
@@ -25,6 +25,8 @@ public class CashMachine {
             }
             System.out.println();
         }
+        */
+        System.out.println(options.size());
     }
 
     private static void getOptionsToChange(int sum, List<int[]> options, int[] countOfEach, Integer[] coins, int numOfCurrentCoin) {
