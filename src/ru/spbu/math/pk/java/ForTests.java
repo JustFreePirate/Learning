@@ -5,14 +5,25 @@ package ru.spbu.math.pk.java;
  */
 public class ForTests {
     public static void main(String[] args) {
-        int count = 0;
-        int n = 999;
-        for (int i = 1; i <= 10; i++)
-            for (int j = i; j <= 10; j++)
-                for (int k = j; k <= 10; k++)
-                    count++;
+        int n = 12;
+        int count = countTwoIntersectSets(n);
         System.out.println(count);
+        System.out.println(Math.pow(4,n)-Math.pow(3,n));
     }
+
+    public static int countTwoIntersectSets(int n) {
+        int max = (int) Math.pow(2,n);
+        int count = 0;
+        for (int a = 0; a < max; a++) {
+            for (int b = 0; b < max; b++) {
+                if ((a & b) > 0) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
     public static int sumOfDigits(int number) {
         int sum = 0;
         while (number > 0) {
