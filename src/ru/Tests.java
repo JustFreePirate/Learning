@@ -1,6 +1,6 @@
 package ru;
 
-import Jama.*;
+
 
 import java.security.MessageDigest;
 import java.util.Random;
@@ -19,4 +19,5 @@ public class Tests {
         list.remove(9);
         list.map(printer);
     }
+
 }
