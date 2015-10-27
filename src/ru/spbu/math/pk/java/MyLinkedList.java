@@ -15,18 +15,6 @@ public class MyLinkedList<E> implements MyList<E> {
     Node<E> head; //ref to begin
     Node<E> tail; //ref to end
 
-    static private class Node<E> {
-        private Node<E> next;
-        private Node<E> prev;
-        private E value;
-
-        public Node(Node<E> prev, Node<E> next, E value) {
-            this.prev = prev;
-            this.next = next;
-            this.value = value;
-        }
-    }
-
     public MyLinkedList() {
         size = 0;
         head = tail = null;
@@ -34,7 +22,7 @@ public class MyLinkedList<E> implements MyList<E> {
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
@@ -157,6 +145,18 @@ public class MyLinkedList<E> implements MyList<E> {
                 current = current.next;
                 f.calculate(current.value);
             }
+        }
+    }
+
+    static private class Node<E> {
+        private Node<E> next;
+        private Node<E> prev;
+        private E value;
+
+        public Node(Node<E> prev, Node<E> next, E value) {
+            this.prev = prev;
+            this.next = next;
+            this.value = value;
         }
     }
 
