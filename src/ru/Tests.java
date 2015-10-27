@@ -1,6 +1,5 @@
 package ru;
 
-import Jama.*;
 
 import java.security.MessageDigest;
 import java.util.Random;
