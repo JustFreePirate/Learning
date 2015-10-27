@@ -3,7 +3,6 @@ package ru;
 
 import java.security.MessageDigest;
 import java.util.Random;
-
 import ru.spbu.math.pk.java.*;
 import ru.spbu.math.pk.java.avl.AvlTree;
 
@@ -15,16 +14,16 @@ public class Tests {
         AvlTree<Integer> tree = new AvlTree<>();
         int module = 127;
         for (int i = 0, d = 3, t = 1; i < module - 1; i++) {
-            t = (t * d) % module;
+            t = (t*d)%module;
             tree.add(t);
         }
-
+        /*
         for (int i = 0, d = 5, t = 1; i < module - 1; i++) {
-            t = (t * d) % module;
+            t = (t*d)%module;
             System.out.println(tree.remove(t));
             //System.out.println(tree.remove(t));
         }
+        */
         tree.forEachLeft(x -> System.out.println(x));
     }
-
 }
