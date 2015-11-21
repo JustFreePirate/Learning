@@ -7,9 +7,9 @@ import java.nio.file.Paths;
 import java.util.Objects;
 
 /**
- * Created by Дмитрий on 16.10.2015.
+ * Created by пїЅпїЅпїЅпїЅпїЅпїЅпїЅ on 16.10.2015.
  */
-class Animal {
+class Animal implements Serializable{
     private final String name;
 
     public Animal(String name) {
