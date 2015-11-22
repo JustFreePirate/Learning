@@ -36,15 +36,19 @@ public class FileTree<E> {
         return current;
     }
 
-    //add file in working directory
-    public void add(String fileName, E file) throws FileAlreadyExistsException {
-        workingDirectory.add(fileName, file);
+    public void print() {
+        rootDirectory.recursivePrint(rootPath);
     }
 
-    //add file in directory
-    public void add(Path dirPath, String fileName, E file) throws FileNotFoundException, FileAlreadyExistsException {
+    //put file in working directory
+    public void put(String fileName, E file) throws FileAlreadyExistsException {
+        workingDirectory.put(fileName, file);
+    }
+
+    //put file in directory
+    public void put(Path dirPath, String fileName, E file) throws FileNotFoundException, FileAlreadyExistsException {
         Directory<E> dir = getDirectory(dirPath);
-        dir.add(fileName, file);
+        dir.put(fileName, file);
     }
 
     //remove file from working directory
@@ -125,13 +129,25 @@ public class FileTree<E> {
         workingDirectoryPath = workingDirectoryPath.resolve(dirPath);
     }
 
-    static class Directory<E> {
+
+    /** inner  */
+    static private class Directory<E> {
         private Map<String, Directory<E>> directories;
         private Map<String, E> files;
 
         public Directory() {
             directories = new HashMap<>();
             files = new HashMap<>();
+        }
+
+        public void recursivePrint(Path prefix) {
+            for (Map.Entry<String, Directory<E>> entry : directories.entrySet()) {
+                System.out.println("[FOLD]  " + prefix.resolve(entry.getKey()));
+                entry.getValue().recursivePrint(prefix.resolve(entry.getKey()));
+            }
+            for (String s : files.keySet()) {
+                System.out.println("[FILE]  " + prefix.resolve(s));
+            }
         }
 
         public E getFile(String fileName) throws FileNotFoundException {
@@ -160,7 +176,7 @@ public class FileTree<E> {
             return files.keySet();
         }
 
-        public void add(String fileName, E file) throws FileAlreadyExistsException {
+        public void put(String fileName, E file) throws FileAlreadyExistsException {
             if (!files.containsKey(fileName)) {
                 files.put(fileName, file);
             } else {
