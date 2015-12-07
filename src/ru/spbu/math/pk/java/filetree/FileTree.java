@@ -1,13 +1,23 @@
 package ru.spbu.math.pk.java.filetree;
 
-import java.io.FileNotFoundException;
-import java.nio.file.FileAlreadyExistsException;
+import ru.spbu.math.pk.java.filetree.exceptions.MyFileAlreadyExistsException;
+import ru.spbu.math.pk.java.filetree.exceptions.MyFileNotFoundException;
+
+//uses ONLY to parse String <-> path in FileTree
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 import java.util.*;
+
 
 /**
  * Created by dima on 21.11.15.
+ * Tree with random access to nodes, like structure in file system. (Without any access to file system)
+ * All files have type generic E, and have to be named unique
+ * All folders have to be named unique too. Files and folders may have the same names.
+ *
+ * @throws MyFileAlreadyExistsException if you try to add file or folder with name that already exist
+ * @throws MyFileNotFoundException if you try get file or folder with name that doesn't exist
  */
 public class FileTree<E> {
     private Path rootPath;
@@ -22,7 +32,7 @@ public class FileTree<E> {
         workingDirectory = rootDirectory;
     }
 
-    private Directory<E> getDirectory(Path dirPath) throws FileNotFoundException {
+    private Directory<E> getDirectory(Path dirPath) throws MyFileNotFoundException {
         dirPath = dirPath.normalize();
         Directory<E> current;
         if (dirPath.isAbsolute()) {
@@ -41,45 +51,45 @@ public class FileTree<E> {
     }
 
     //put file in working directory
-    public void put(String fileName, E file) throws FileAlreadyExistsException {
+    public void put(String fileName, E file) throws MyFileAlreadyExistsException {
         workingDirectory.put(fileName, file);
     }
 
     //put file in directory
-    public void put(Path dirPath, String fileName, E file) throws FileNotFoundException, FileAlreadyExistsException {
+    public void put(Path dirPath, String fileName, E file) throws MyFileNotFoundException, MyFileAlreadyExistsException {
         Directory<E> dir = getDirectory(dirPath);
         dir.put(fileName, file);
     }
 
     //remove file from working directory
-    public void remove(String fileName) throws FileNotFoundException {
+    public void remove(String fileName) throws MyFileNotFoundException {
         workingDirectory.remove(fileName);
     }
 
     //remove file from directory
-    public void remove(Path dirPath, String fileName) throws FileNotFoundException {
+    public void remove(Path dirPath, String fileName) throws MyFileNotFoundException {
         Directory<?> dir = getDirectory(dirPath);
         dir.remove(fileName);
     }
 
     //get file in working directory with filename
-    public E get(String fileName) throws FileNotFoundException {
+    public E get(String fileName) throws MyFileNotFoundException {
         return workingDirectory.getFile(fileName);
     }
 
     //get file in with filename
-    public E get(Path dirPath, String fileName) throws FileNotFoundException {
+    public E get(Path dirPath, String fileName) throws MyFileNotFoundException {
         Directory<E> dir = getDirectory(dirPath);
         return dir.getFile(fileName);
     }
 
     //make new directory in working directory
-    public void mkdir(String dirName) throws FileAlreadyExistsException {
+    public void mkdir(String dirName) throws MyFileAlreadyExistsException {
         workingDirectory.mkdir(dirName);
     }
 
     //make new directory with name in directory
-    public void mkdir(Path dirPath, String dirName) throws FileNotFoundException, FileAlreadyExistsException {
+    public void mkdir(Path dirPath, String dirName) throws MyFileNotFoundException, MyFileAlreadyExistsException {
         Directory<?> dir = getDirectory(dirPath);
         dir.mkdir(dirName);
     }
@@ -94,7 +104,7 @@ public class FileTree<E> {
         try {
             Directory<?> dir = getDirectory(dirPath);
             return dir.getFilesSet();
-        } catch (FileNotFoundException e) {
+        } catch (MyFileNotFoundException e) {
             return Collections.emptySet();
         }
     }
@@ -107,7 +117,7 @@ public class FileTree<E> {
         try {
             Directory<?> dir = getDirectory(dirPath);
             return dir.getDirsSet();
-        } catch (FileNotFoundException e) {
+        } catch (MyFileNotFoundException e) {
             return Collections.emptySet();
         }
     }
@@ -118,13 +128,13 @@ public class FileTree<E> {
     }
 
     //change working directory
-    public void changeDir(String dirName) throws FileNotFoundException {
+    public void changeDir(String dirName) throws MyFileNotFoundException {
         workingDirectory = workingDirectory.getDir(dirName);
         workingDirectoryPath = workingDirectoryPath.resolve(dirName);
     }
 
     //change working directory
-    public void changeDir(Path dirPath) throws FileNotFoundException {
+    public void changeDir(Path dirPath) throws MyFileNotFoundException {
         workingDirectory = getDirectory(dirPath);
         workingDirectoryPath = workingDirectoryPath.resolve(dirPath);
     }
@@ -150,21 +160,21 @@ public class FileTree<E> {
             }
         }
 
-        public E getFile(String fileName) throws FileNotFoundException {
+        public E getFile(String fileName) throws MyFileNotFoundException {
             E file = files.get(fileName);
             if (file != null) {
                 return file;
             } else {
-                throw new FileNotFoundException();
+                throw new MyFileNotFoundException();
             }
         }
 
-        public Directory<E> getDir(String dirName) throws FileNotFoundException {
+        public Directory<E> getDir(String dirName) throws MyFileNotFoundException {
             Directory<E> dir = directories.get(dirName);
             if (dir != null) {
                 return dir;
             } else {
-                throw new FileNotFoundException();
+                throw new MyFileNotFoundException();
             }
         }
 
@@ -176,27 +186,27 @@ public class FileTree<E> {
             return files.keySet();
         }
 
-        public void put(String fileName, E file) throws FileAlreadyExistsException {
+        public void put(String fileName, E file) throws MyFileAlreadyExistsException {
             if (!files.containsKey(fileName)) {
                 files.put(fileName, file);
             } else {
-                throw new FileAlreadyExistsException(fileName);
+                throw new MyFileAlreadyExistsException(fileName);
             }
         }
 
-        public void remove(String fileName) throws FileNotFoundException {
+        public void remove(String fileName) throws MyFileNotFoundException {
             if (files.containsKey(fileName)) {
                 files.remove(fileName);
             } else {
-                throw new FileNotFoundException();
+                throw new MyFileNotFoundException();
             }
         }
 
-        public void mkdir(String dirName) throws FileAlreadyExistsException {
+        public void mkdir(String dirName) throws MyFileAlreadyExistsException {
             if (!directories.containsKey(dirName)) {
                 directories.put(dirName, new Directory<E>());
             } else {
-                throw new FileAlreadyExistsException(dirName);
+                throw new MyFileAlreadyExistsException(dirName);
             }
         }
     }
