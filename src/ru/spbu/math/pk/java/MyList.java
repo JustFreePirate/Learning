@@ -11,7 +11,7 @@ public interface MyList<E> {
     boolean isEmpty();
     void add(E e);
     void add(int index, E e);
-    void remove(int index);
+    void remove(int index) throws RemoveFromEmptyListException;
     void clear();
     E get(int index);
     void set(int index, E element);
